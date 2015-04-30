@@ -1,0 +1,24 @@
+{
+  "name": "bmx",
+  "version": "0.1.0",
+  "description": "Bitmap transformer: Altering bitmaps \"the hard way\".",
+  "main": "bmx.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clintonjnelson/bmx"
+  },
+  "keywords": [
+    "bitmap",
+    "transformer",
+    "codefellows"
+  ],
+  "author": "clintonjnelson@live.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/clintonjnelson/bmx/issues"
+  },
+  "homepage": "https://github.com/clintonjnelson/bmx"
+}
