@@ -5,19 +5,22 @@ var transforms = require('./bmx.js').transforms;
 
 var transformsKeys = Object.keys(transforms);
 var testNum;
-for (var i in transformsKeys ) {    // for index values in transformsKeys
-  testNum = i + 1;
-  transformer('./lib/bitmap1.bmp', ('test' + testNum + '.bmp'), transforms[ transformsKeys[i] ]);
-}
+// for (var i in transformsKeys ) {    // for index values in transformsKeys
+//   testNum = i + 1;
+//   transformer('./lib/bitmap1.bmp', ('test' + testNum + '.bmp'), transforms[ transformsKeys[i] ]);
+// }
 
 
-// transformer('./lib/non_palette_bitmap.bmp', ('test1.bmp'), transforms.greyErase );
-// transformer('./lib/bitmap1.bmp', ('test2.bmp'), transforms.invert );
-// transformer('./lib/bitmap1.bmp', ('test3.bmp'), transforms.monochrome );
-// transformer('./lib/bitmap1.bmp', ('test4.bmp'), transforms.onlyBlues );
-// transformer('./lib/bitmap1.bmp', ('test5.bmp'), transforms.onlyGreens );
-// transformer('./lib/bitmap1.bmp', ('test6.bmp'), transforms.colorSwap );
-// transformer('./lib/bitmap1.bmp', ('test7.bmp'), transforms.random );
+// Without Color Table Palette
+transformer('./lib/non_palette_bitmap.bmp', ('./lib/examples/exInvt.bmp'), transforms.greyErase );
+
+// With Color Table Palette
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exInvt.bmp'), transforms.invert );
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exGreyScale.bmp'), transforms.greyScale );
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exOnlyBlues.bmp'), transforms.onlyBlues );
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exOnlyGreens.bmp'), transforms.onlyGreens );
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exColorSwap.bmp'), transforms.colorSwap );
+// transformer('./lib/bitmap1.bmp', ('./lib/examples/exRandom.bmp'), transforms.random );
 
 
 

@@ -45,20 +45,26 @@ module.exports = {
           full: bmpRaw.slice(bmpRaw.readUInt32LE(10), bmpRaw.length)
         }
       };
-      logBmpObj(bmpObj);                // Console.log parsed info
+      // logBmpObj(bmpObj);                // Console.log parsed info
 
-      // transformBMP Listener
-      // controller.on('transformBMP', function colorTransform() { // took transformCallback out of here - in higher level
-        var numColors = bmpObj.dibHeader.numPaletteColors; // 256
-        var cpOffset = 54;
-        var endOffset = bmpRaw.readUInt32LE(10);  // 1078 for test
-        function rgbaWrite(b, g, r, a) {
-          bmpRaw.writeUInt8( b, i   );
-          bmpRaw.writeUInt8( g, i + 1 );
-          bmpRaw.writeUInt8( r, i + 2 );
-          bmpRaw.writeUInt8( a, i + 3 );
-        }
+      // Setup for Reading/Writing Color Data
+      var numColors = bmpObj.dibHeader.numPaletteColors; // 256
+      var cpOffset = 54;                        // Offset to Color Palette Table (if has one)
+      var endOffset = bmpRaw.readUInt32LE(10);  // 1078 for color-Palette file, 54 for Nonpalette file
+      function writeNewBmpFile() {              // Write Buffer to new File
+        fs.writeFile(outputFileName, bmpRaw, function(err) {
+          if (err) throw err;
+          console.log("it Saved!");
+        });
+      }
+      function rgbaWrite(b, g, r, a) {          // Write New Buffer Bytes
+        bmpRaw.writeUInt8( b, i   );
+        bmpRaw.writeUInt8( g, i + 1 );
+        bmpRaw.writeUInt8( r, i + 2 );
+        bmpRaw.writeUInt8( a, i + 3 );
+      }
 
+      if(cpOffset < endOffset) {
         // Loop through reading, transforming, writing back to buffer
         for(var b, g, r, a, i = cpOffset; i < endOffset; i+=4 ) {
           b = bmpRaw.readUInt8( i     );
@@ -70,18 +76,14 @@ module.exports = {
           transformCB(b, g, r, a, rgbaWrite);
         }
 
-        // controller.emit('writeBMP');
-      // });
+        // Write the Transformed File
+        console.log('cpOffset: ', cpOffset, ". And endOffset: ", endOffset);
+        writeNewBmpFile();
 
-      // writeBMP Listener
-      // controller.on("writeBMP", function writeBMP() {
-        fs.writeFile(outputFileName, bmpRaw, function(err) {
-          if (err) throw err;
-          console.log("it Saved!");
-        });
-      // });
-
-      // controller.emit('transformBMP');
+      } else {
+        console.log('cpOffset: ', cpOffset, "| endOffset: ", endOffset);
+        console.log("Currently cannot transform non-palette-table bitmaps.");
+      }
     });
   },
 
@@ -133,3 +135,14 @@ module.exports = {
     }
   }
 };
+
+
+
+// controller.on('transformBMP', function colorTransform() { // took transformCallback out of here - in higher level
+// controller.emit('writeBMP');
+// });
+
+// writeBMP Listener
+// controller.on("writeBMP", function writeBMP() {
+// });
+// controller.emit('transformBMP');
