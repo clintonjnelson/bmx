@@ -48,6 +48,7 @@ describe('bmx', function() {
         });
 
         it('inverts the colors, subtracting each from 255', function(done){
+          console.log('Current directory is: ', process.cwd() );
           var origBmp = fs.readFileSync('./test/support/fixtures/bitmap1.bmp');
           var invtBmp = fs.readFileSync('./test/support/temp/testInvert.bmp');
           expect(origBmp.readUInt8(58)).to.not.equal(invtBmp.readUInt8(58));

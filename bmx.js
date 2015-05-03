@@ -45,26 +45,20 @@ module.exports = {
           full: bmpRaw.slice(bmpRaw.readUInt32LE(10), bmpRaw.length)
         }
       };
-      // logBmpObj(bmpObj);                // Console.log parsed info
+      // logBmpObj(bmpObj);                     // Console.log parsed info
 
       // Setup for Reading/Writing Color Data
       var numColors = bmpObj.dibHeader.numPaletteColors; // 256
       var cpOffset = 54;                        // Offset to Color Palette Table (if has one)
       var endOffset = bmpRaw.readUInt32LE(10);  // 1078 for color-Palette file, 54 for Nonpalette file
-      function writeNewBmpFile() {              // Write Buffer to new File
-        fs.writeFile(outputFileName, bmpRaw, function(err) {
-          if (err) throw err;
-          console.log("it Saved!");
-        });
-      }
-      function rgbaWrite(b, g, r, a) {          // Write New Buffer Bytes
-        bmpRaw.writeUInt8( b, i   );
-        bmpRaw.writeUInt8( g, i + 1 );
-        bmpRaw.writeUInt8( r, i + 2 );
-        bmpRaw.writeUInt8( a, i + 3 );
-      }
+      function paletteTransform() {
+        function rgbaWrite(b, g, r, a) {          // Write New Buffer Bytes
+          bmpRaw.writeUInt8( b, i   );
+          bmpRaw.writeUInt8( g, i + 1 );
+          bmpRaw.writeUInt8( r, i + 2 );
+          bmpRaw.writeUInt8( a, i + 3 );
+        }
 
-      if(cpOffset < endOffset) {
         // Loop through reading, transforming, writing back to buffer
         for(var b, g, r, a, i = cpOffset; i < endOffset; i+=4 ) {
           b = bmpRaw.readUInt8( i     );
@@ -77,12 +71,25 @@ module.exports = {
         }
 
         // Write the Transformed File
-        console.log('cpOffset: ', cpOffset, ". And endOffset: ", endOffset);
         writeNewBmpFile();
-
-      } else {
+      }
+      function nonPaletteTransform(){
         console.log('cpOffset: ', cpOffset, "| endOffset: ", endOffset);
         console.log("Currently cannot transform non-palette-table bitmaps.");
+      }
+
+      function writeNewBmpFile() {              // Write Buffer to new File
+        fs.writeFile(outputFileName, bmpRaw, function(err) {
+          if (err) throw err;
+          console.log("it Saved!");
+        });
+      }
+
+      // Run Transforms
+      if(cpOffset < endOffset) {
+        paletteTransform();
+      } else {
+        nonPaletteTransform();
       }
     });
   },
