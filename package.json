@@ -4,7 +4,7 @@
   "description": "Bitmap transformer: Limited bitmap image altering.",
   "main": "bmx.js",
   "scripts": {
-    "test": "echo ./node_modules/grunt-cli/bin/grunt test"
+    "test": "./node_modules/grunt-cli/bin/grunt test"
   },
   "repository": {
     "type": "git",
