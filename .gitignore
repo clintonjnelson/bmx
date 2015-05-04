@@ -1,0 +1,4 @@
+**/node_modules
+/lib/examples/*
+/test/support/temp/*
+**/.DS_Store
