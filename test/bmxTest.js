@@ -26,8 +26,9 @@ describe('bmx', function() {
       describe('greyErase that', function() {
         beforeEach(function(done){
           // console.log("File: ", __filename);
-          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testGreyErase.bmp', transforms.greyErase );
-          done();
+          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testGreyErase.bmp', transforms.greyErase, done );
+          // PASSED DONE INSTEAD OF CALLING IT IN AN ANONYMOUS FUNCTION.
+          // done();
         });
 
         it('turns the entire color palette table to one shade of gray', function(done){
@@ -44,8 +45,9 @@ describe('bmx', function() {
 
       describe('invert that', function() {
         beforeEach(function(done){
-          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testInvert.bmp', transforms.invert );
-          done();
+          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testInvert.bmp', transforms.invert, done);
+          // PASSED DONE INSTEAD OF CALLING IT IN AN ANONYMOUS FUNCTION.
+          // done();
         });
 
         it('inverts the colors, subtracting each from 255', function(done){
@@ -72,8 +74,9 @@ describe('bmx', function() {
       describe('greyErase that', function() {
         beforeEach(function(done){
           // console.log("File: ", __filename);
-          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonGreyErase.bmp', transforms.greyErase );
-          done();
+          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonGreyErase.bmp', transforms.greyErase, done );
+          // PASSED DONE INSTEAD OF CALLING IT IN AN ANONYMOUS FUNCTION.
+          // done();
         });
 
         it('turns the entire color palette table to one shade of gray', function(done){
@@ -90,8 +93,9 @@ describe('bmx', function() {
 
       describe('invert that', function() {
         beforeEach(function(done){
-          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonInvert.bmp', transforms.invert );
-          done();
+          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonInvert.bmp', transforms.invert, done );
+          // PASSED DONE INSTEAD OF CALLING IT IN ANONYMOUS. OTHERWISE COULD HAVE JUST WRITTEN OUT MORE FUNCTIONALITY IN CALL
+          // done();
         });
 
         it('inverts the colors, subtracting each from 255 in each pixel', function(done){

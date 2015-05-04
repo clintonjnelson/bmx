@@ -10,7 +10,7 @@ var _shuffle = require('lodash').shuffle;
 
 
 module.exports = {
-  transformer: function(bmpFilePath, outputFileName, transformCB) {
+  transformer: function(bmpFilePath, outputFileName, transformCB, callback) {
     fs.readFile(bmpFilePath, function(err, data) {
       if(err) throw err;
       var bmpRaw = data;
@@ -72,8 +72,14 @@ module.exports = {
       function writeNewBmpFile() {              // Write Buffer to new File
         fs.writeFile(outputFileName, bmpRaw, function(err) {
           if(err) throw err;
+
+          // Insert Callback Here for Async Testing Functionality (passing done() )
+          if(typeof callback === 'function'){
+            callback();
+          }
           console.log("it Saved!");
         });
+
       }
 
       // Run Transforms
