@@ -55,7 +55,7 @@ module.exports = {
         }
 
         // Loop through reading, transforming, writing back to buffer
-        for(var b, g, r, a, i = cpOffset; i < endTrans; i + = 4 ) {
+        for(var b, g, r, a, i = cpOffset; i < endTrans; i += 4 ) {
           b = bmpRaw.readUInt8( i     );
           g = bmpRaw.readUInt8( i + 1 );
           r = bmpRaw.readUInt8( i + 2 );
