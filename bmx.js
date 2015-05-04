@@ -1,9 +1,6 @@
-/// Open a BMP & read it into a buffer
-////// Create a readstream
-////// Make a new buffer
-////// Read the image & write into the buffer
-////// Readstream into the new buffer
-//////
+// Library for BMP Transforms With Node
+// Handles ColorTable/Palette & Non-ColorTable/Palette BMP's
+// BM Format only.
 
 'use strict';
 
@@ -15,7 +12,7 @@ var _shuffle = require('lodash').shuffle;
 module.exports = {
   transformer: function(bmpFilePath, outputFileName, transformCB) {
     fs.readFile(bmpFilePath, function(err, data) {
-      if (err) throw err;
+      if(err) throw err;
       var bmpRaw = data;
 
       // Parts of the BMP broken out into an object
@@ -58,7 +55,7 @@ module.exports = {
         }
 
         // Loop through reading, transforming, writing back to buffer
-        for(var b, g, r, a, i = cpOffset; i < endTrans; i+=4 ) {
+        for(var b, g, r, a, i = cpOffset; i < endTrans; i + = 4 ) {
           b = bmpRaw.readUInt8( i     );
           g = bmpRaw.readUInt8( i + 1 );
           r = bmpRaw.readUInt8( i + 2 );
@@ -74,7 +71,7 @@ module.exports = {
 
       function writeNewBmpFile() {              // Write Buffer to new File
         fs.writeFile(outputFileName, bmpRaw, function(err) {
-          if (err) throw err;
+          if(err) throw err;
           console.log("it Saved!");
         });
       }
@@ -138,14 +135,3 @@ module.exports = {
     }
   }
 };
-
-
-
-// controller.on('transformBMP', function colorTransform() { // took transformCallback out of here - in higher level
-// controller.emit('writeBMP');
-// });
-
-// writeBMP Listener
-// controller.on("writeBMP", function writeBMP() {
-// });
-// controller.emit('transformBMP');

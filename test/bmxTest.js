@@ -52,7 +52,6 @@ describe('bmx', function() {
           console.log('Current directory is: ', process.cwd() );
           var origBmp = fs.readFileSync('./test/support/fixtures/bitmap1.bmp');
           var invtBmp = fs.readFileSync('./test/support/temp/testInvert.bmp');
-          expect(origBmp.readUInt8(58)).to.not.equal(invtBmp.readUInt8(58));
           for(var i=55, origColor, invtColor; i < origBmp.readUInt32LE(10); i++) {
             // FIX FOR THE "a" values that are screwing things up. Don't need to change. IF statement.
             if(i%4 === 2) {
