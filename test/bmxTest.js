@@ -26,7 +26,7 @@ describe('bmx', function() {
       describe('greyErase that', function() {
         beforeEach(function(done){
           // console.log("File: ", __filename);
-          transformer('./test/support/fixtures/bitmap1.bmp', ('./test/support/temp/testGreyErase.bmp'), transforms.greyErase );
+          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testGreyErase.bmp', transforms.greyErase );
           done();
         });
 
@@ -44,7 +44,7 @@ describe('bmx', function() {
 
       describe('invert that', function() {
         beforeEach(function(done){
-          transformer('./test/support/fixtures/bitmap1.bmp', ('./test/support/temp/testInvert.bmp'), transforms.invert );
+          transformer('./test/support/fixtures/bitmap1.bmp', './test/support/temp/testInvert.bmp', transforms.invert );
           done();
         });
 
@@ -72,7 +72,7 @@ describe('bmx', function() {
       describe('greyErase that', function() {
         beforeEach(function(done){
           // console.log("File: ", __filename);
-          transformer('./test/support/fixtures/non_palette_bitmap.bmp', ('./test/support/temp/testNonGreyErase.bmp'), transforms.greyErase );
+          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonGreyErase.bmp', transforms.greyErase );
           done();
         });
 
@@ -90,7 +90,7 @@ describe('bmx', function() {
 
       describe('invert that', function() {
         beforeEach(function(done){
-          transformer('./test/support/fixtures/non_palette_bitmap.bmp', ('./test/support/temp/testNonInvert.bmp'), transforms.invert );
+          transformer('./test/support/fixtures/non_palette_bitmap.bmp', './test/support/temp/testNonInvert.bmp', transforms.invert );
           done();
         });
 
