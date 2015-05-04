@@ -9,8 +9,6 @@
 
 var fs = require('fs');
 var logBmpObj = require('./lib/log_bmp_obj.js');
-var EventEmitter = require('events').EventEmitter;
-var controller = new EventEmitter();
 var _shuffle = require('lodash').shuffle;
 
 
@@ -45,22 +43,22 @@ module.exports = {
           full: bmpRaw.slice(bmpRaw.readUInt32LE(10), bmpRaw.length)
         }
       };
-      // logBmpObj(bmpObj);                     // Console.log parsed info
+      logBmpObj(bmpObj);                     // Console.log parsed info
 
       // Setup for Reading/Writing Color Data
       var numColors = bmpObj.dibHeader.numPaletteColors; // 256
       var cpOffset = 54;                        // Offset to Color Palette Table (if has one)
       var endOffset = bmpRaw.readUInt32LE(10);  // 1078 for color-Palette file, 54 for Nonpalette file
-      function paletteTransform() {
+      function bmpTransform(endTrans) {
         function rgbaWrite(b, g, r, a) {          // Write New Buffer Bytes
-          bmpRaw.writeUInt8( b, i   );
+          bmpRaw.writeUInt8( b, i     );
           bmpRaw.writeUInt8( g, i + 1 );
           bmpRaw.writeUInt8( r, i + 2 );
           bmpRaw.writeUInt8( a, i + 3 );
         }
 
         // Loop through reading, transforming, writing back to buffer
-        for(var b, g, r, a, i = cpOffset; i < endOffset; i+=4 ) {
+        for(var b, g, r, a, i = cpOffset; i < endTrans; i+=4 ) {
           b = bmpRaw.readUInt8( i     );
           g = bmpRaw.readUInt8( i + 1 );
           r = bmpRaw.readUInt8( i + 2 );
@@ -73,10 +71,6 @@ module.exports = {
         // Write the Transformed File
         writeNewBmpFile();
       }
-      function nonPaletteTransform(){
-        console.log('cpOffset: ', cpOffset, "| endOffset: ", endOffset);
-        console.log("Currently cannot transform non-palette-table bitmaps.");
-      }
 
       function writeNewBmpFile() {              // Write Buffer to new File
         fs.writeFile(outputFileName, bmpRaw, function(err) {
@@ -87,9 +81,11 @@ module.exports = {
 
       // Run Transforms
       if(cpOffset < endOffset) {
-        paletteTransform();
+        bmpTransform(endOffset);
+      } else if( (cpOffset === endOffset) && (bmpObj.dibHeader.bitsPerPixel === 24) ) {
+        bmpTransform(bmpRaw.length);
       } else {
-        nonPaletteTransform();
+        console.log("Sorry, bmx is currently not configured to transform that kind of bitmap.");
       }
     });
   },
@@ -106,7 +102,7 @@ module.exports = {
       var gInv = 255 - g;
       var rInv = 255 - r;
       var aInv = 255 - a;
-      bgraWriteCallback(bInv, gInv, rInv, aInv);
+      bgraWriteCallback(bInv, gInv, rInv, a);
     },
     // Makes image darker
     darker: function(b, g, r, a, bgraWriteCallback){
@@ -123,15 +119,15 @@ module.exports = {
     },
     // Remove every color but reds
     onlyReds: function(b, g, r, a, bgraWriteCallback){
-      bgraWriteCallback(0, 0, r, 0);
+      bgraWriteCallback(0, 0, r, a);
     },
     // Remove every color but greens
     onlyGreens: function(b, g, r, a, bgraWriteCallback){
-      bgraWriteCallback(0, g, 0, 0);
+      bgraWriteCallback(0, g, 0, a);
     },
     // Remove every color but blues
     onlyBlues: function(b, g, r, a, bgraWriteCallback){
-      bgraWriteCallback(b, 0, 0, 0);
+      bgraWriteCallback(b, 0, 0, a);
     },
     // Choose new random colors for the Image
     random: function(b, g, r, a, bgraWriteCallback){
